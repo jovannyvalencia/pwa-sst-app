@@ -2,13 +2,15 @@ import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { Logo } from './Logo';
 import { ConsultaIA } from './ConsultaIA';
+import { ReporteIncidentes } from './ReporteIncidentes';
+import { InspeccionesSST } from './InspeccionesSST';
 
 interface DashboardProps {
   user: any;
 }
 
 export const Dashboard = ({ user }: DashboardProps) => {
-  const [tabActiva, setTabActiva] = useState<'inicio' | 'ia'>('inicio');
+  const [tabActiva, setTabActiva] = useState<'inicio' | 'ia' | 'reportes' | 'inspecciones'>('inicio');
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -42,6 +44,26 @@ export const Dashboard = ({ user }: DashboardProps) => {
             >
               Asistente IA
             </button>
+            <button
+              onClick={() => setTabActiva('reportes')}
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                tabActiva === 'reportes'
+                  ? 'bg-blue-50 text-blue-600'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Reporte Incidentes
+            </button>
+            <button
+              onClick={() => setTabActiva('inspecciones')}
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                tabActiva === 'inspecciones'
+                  ? 'bg-blue-50 text-blue-600'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Inspecciones SST
+            </button>
           </div>
         </div>
 
@@ -60,7 +82,7 @@ export const Dashboard = ({ user }: DashboardProps) => {
 
       {/* Contenido según la pestaña activa */}
       <main className="max-w-7xl mx-auto py-8 px-6">
-        {tabActiva === 'inicio' ? (
+        {tabActiva === 'inicio' && (
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-6">
               Bienvenido a la Plataforma SST
@@ -84,8 +106,11 @@ export const Dashboard = ({ user }: DashboardProps) => {
                 <p className="text-sm text-gray-600 mb-4">
                   Registra y realiza seguimiento a condiciones o actos inseguros.
                 </p>
-                <button className="text-sm font-medium text-gray-400 cursor-not-allowed">
-                  Próximamente
+                <button
+                  onClick={() => setTabActiva('reportes')}
+                  className="text-sm font-medium text-blue-600 hover:text-blue-500"
+                >
+                  Ir a Reportes →
                 </button>
               </div>
 
@@ -94,15 +119,20 @@ export const Dashboard = ({ user }: DashboardProps) => {
                 <p className="text-sm text-gray-600 mb-4">
                   Diligencia listas de chequeo y verificaciones en campo.
                 </p>
-                <button className="text-sm font-medium text-gray-400 cursor-not-allowed">
-                  Próximamente
+                <button
+                  onClick={() => setTabActiva('inspecciones')}
+                  className="text-sm font-medium text-blue-600 hover:text-blue-500"
+                >
+                  Ir a Inspecciones →
                 </button>
               </div>
             </div>
           </div>
-        ) : (
-          <ConsultaIA />
         )}
+
+        {tabActiva === 'ia' && <ConsultaIA />}
+        {tabActiva === 'reportes' && <ReporteIncidentes />}
+        {tabActiva === 'inspecciones' && <InspeccionesSST />}
       </main>
     </div>
   );

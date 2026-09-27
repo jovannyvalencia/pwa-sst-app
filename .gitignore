@@ -1,0 +1,8 @@
+backend/venv/
+pwa-ia-sst/node_modules/
+dist/
+.env
+.env.local
+__pycache__/
+.DS_Store
+Thumbs.db
